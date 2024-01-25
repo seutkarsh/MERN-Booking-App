@@ -1,20 +1,22 @@
-import express, { Request, Response } from 'express'
-import cors from 'cors'
-import 'dotenv/config'
-import mongoose from 'mongoose'
+import express from 'express'
+import 'reflect-metadata'
+import Loader from './loaders/index'
+import config from './config'
 
-mongoose.connect(process.env.MONGODB_CONNECTION_URI as string)
+const startServer = async () => {
+    const app = express()
 
-const app = express()
+    await Loader({ expressApp: app })
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(cors())
+    return app.listen(config.port, () => {
+        console.log(`Server Listening on port: ${config.port}`)
+    })
+}
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Response from server')
-})
-
-app.listen(5000, () => {
-    console.log(`Server Listening on port 5000`)
-})
+startServer()
+    .then(() => {
+        console.log(`Server Start Complete`)
+    })
+    .catch((e) => {
+        console.log(`Server Start Failed becasuse of Error: ${e.message}`)
+    })
