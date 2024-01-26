@@ -2,7 +2,7 @@ import mongoose, { Connection } from 'mongoose'
 import { Container } from 'typedi'
 import { Document } from 'mongodb'
 
-export interface TUser extends Document {
+export interface IUser extends Document {
     _id: string
     firstName: string
     lastName: string
