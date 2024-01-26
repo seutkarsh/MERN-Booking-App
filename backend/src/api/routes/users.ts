@@ -1,27 +1,72 @@
 import { Request, Response, Router } from 'express'
 import { Container } from 'typedi'
 import {
+    ILoginFromDetails,
     IRegistrationFromDetails,
     UserService,
 } from '../../services/UserService'
-import { ResponseWrappper } from '../response/ResponseWrapper'
+import { ResponseWrappper } from '../responses/ResponseWrapper'
+import { IUserRegistration } from '../responses/user'
+import {
+    userRegistrationValidator,
+    userLoginValidator,
+} from '../validators/user'
+import { validationResult } from 'express-validator'
 
 export default (router: Router) => {
     const userService = Container.get(UserService)
-    router.post('/register', async (req: Request, res: Response) => {
-        const response = new ResponseWrappper()
-        try {
-            const registrationDetails: IRegistrationFromDetails = {
-                email: req.body.email,
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                password: req.body.password,
+    router.post(
+        '/register',
+        userRegistrationValidator,
+        async (req: Request, res: Response) => {
+            const response = new ResponseWrappper<IUserRegistration>()
+            try {
+                const validationErrors = validationResult(req)
+                if (!validationErrors.isEmpty()) {
+                    return res
+                        .status(400)
+                        .json({ message: validationErrors.array() })
+                }
+                const registrationDetails: IRegistrationFromDetails = {
+                    email: req.body.email,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    password: req.body.password,
+                }
+                const data = await userService.registerUser(registrationDetails)
+                response.setData(data)
+            } catch (e) {
+                response.setError(e.message)
             }
-            const data = await userService.registerUser(registrationDetails)
-            response.setData(data)
-        } catch (e) {
-            response.setError(e.message)
+            res.json(response)
         }
-        res.json(response)
-    })
+    )
+
+    router.post(
+        '/login',
+        userLoginValidator,
+        async (req: Request, res: Response) => {
+            const response = new ResponseWrappper<IUserRegistration>()
+
+            try {
+                const validationErrors = validationResult(req)
+                if (!validationErrors.isEmpty()) {
+                    return res
+                        .status(400)
+                        .json({ message: validationErrors.array() })
+                }
+
+                const loginDetails: ILoginFromDetails = {
+                    email: req.body.email,
+                    password: req.body.password,
+                }
+
+                const data = await userService.userLogin(loginDetails)
+                response.setData(data)
+            } catch (e) {
+                response.setError(e.message)
+            }
+            res.json(response)
+        }
+    )
 }

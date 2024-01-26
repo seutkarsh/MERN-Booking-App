@@ -20,10 +20,25 @@ export class UserService {
         }
 
         const createdUser = await this.userSchema.create(userDetails)
-        const token: string = jwt.sign(
-            { userId: createdUser.id },
-            config.jwt.secretKey
+        const token: string = this.generateToken(createdUser)
+        return { authToken: token }
+    }
+
+    async userLogin(formFields: ILoginFromDetails) {
+        const user = await this.getUserByEmail(formFields.email)
+        if (!user) {
+            throw new Error(Errors.INVALID_CREDENTIALS)
+        }
+        const isMatch: boolean = await bcryptjs.compare(
+            formFields.password,
+            user.password
         )
+
+        if (!isMatch) {
+            throw new Error(Errors.INVALID_CREDENTIALS)
+        }
+        const token: string = this.generateToken(user)
+        return { authToken: token }
     }
 
     private async getUserByEmail(email: string): Promise<IUser | null> {
@@ -33,14 +48,26 @@ export class UserService {
     private hashPassword(password: string) {
         return bcryptjs.hash(password, config.salt)
     }
+
+    private generateToken(user: IUser) {
+        return jwt.sign({ userId: user.id }, config.jwt.secretKey, {
+            expiresIn: '1d',
+        })
+    }
 }
 
 enum Errors {
     USER_ALREADY_EXISTS = 'User Already Exists',
+    INVALID_CREDENTIALS = 'Invalid Credentials',
 }
 export interface IRegistrationFromDetails {
     password: string
     email: string
     firstName: string
     lastName: string
+}
+
+export interface ILoginFromDetails {
+    password: string
+    email: string
 }

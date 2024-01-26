@@ -9,9 +9,10 @@ export default async ({
 }: {
     expressApp: Application
 }): Promise<void> => {
-    expressLoader({ app: expressApp })
     const database: Connection = await mongooseLoader()
     console.log(`Database Load Complete`)
 
     await dependencyInjector({ database })
+
+    expressLoader({ app: expressApp })
 }

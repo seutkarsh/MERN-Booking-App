@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
 // const User = mongoose.model<TUser>('User', userSchema)
 
 export default {
-    name: 'User',
+    name: 'UserSchema',
     model: Container.get<Connection>('Database').model<mongoose.Document>(
         'User',
         userSchema,

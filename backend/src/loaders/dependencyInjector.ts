@@ -4,6 +4,7 @@ import { Container } from 'typedi'
 export default async ({ database }: { database: Connection }) => {
     try {
         Container.set('Database', database)
+
         ;(await import('../models')).models.forEach((m) => {
             Container.set(m.name, m.model)
         })
