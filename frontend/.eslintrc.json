@@ -22,9 +22,10 @@
     },
     "plugins": [ "react", "@typescript-eslint", "react-hooks" ],
     "rules": {
+        "react/react-in-jsx-scope": "off",
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx",".ts",".tsx"] }]
         "no-use-before-define": "off",
         "@typescript-eslint/no-use-before-define": [ "error" ],
-        "react/jsx-filename-extension": [ "warn", { "extensions": [ ".tsx" ] } ],
         "import/extensions": [ "error", "ignorePackages", { "ts": "never", "tsx": "never" } ],
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": [ "error" ],
