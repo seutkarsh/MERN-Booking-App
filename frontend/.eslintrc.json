@@ -23,7 +23,7 @@
     "plugins": [ "react", "@typescript-eslint", "react-hooks" ],
     "rules": {
         "react/react-in-jsx-scope": "off",
-        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx",".ts",".tsx"] }],
+        "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx",".ts",".tsx"] }],
         "no-use-before-define": "off",
         "@typescript-eslint/no-use-before-define": [ "error" ],
         "import/extensions": [ "error", "ignorePackages", { "ts": "never", "tsx": "never" } ],

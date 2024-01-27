@@ -8,7 +8,7 @@ if (!envFound) {
     throw new Error("⚠️  Couldn't find .env file  ⚠️")
 }
 export default {
-    port: parseInt(process.env.PORT || '3000', 10) || 3000,
+    port: parseInt(process.env.PORT || '7000', 10) || 7000,
     salt:
         process.env.SALT ||
         '$2a$10$STZsLN64.jjDD4s2BWMuY.r1G/Aj9.brGZvmEkh3rg514wkg3HX1K',

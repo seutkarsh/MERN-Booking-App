@@ -1,12 +1,12 @@
 import Header from '../components/Header'
 import Hero from '../components/Hero'
 import Footer from '../components/Footer'
-import React from 'react'
+import React, { ReactElement } from 'react'
 
 interface ILayoutProps {
     children: React.ReactNode
 }
-const Layout = ({ children }: ILayoutProps) => {
+const Layout = ({ children }: ILayoutProps): ReactElement => {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />

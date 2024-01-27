@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-const Header = () => {
+import { ReactElement } from 'react'
+const Header = (): ReactElement => {
     return (
         <div className="bg-blue-800 py-6">
             <div className="container mx-auto flex justify-between">

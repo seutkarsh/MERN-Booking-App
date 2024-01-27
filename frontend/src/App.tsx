@@ -5,8 +5,10 @@ import {
     Navigate,
 } from 'react-router-dom'
 import Layout from './components/Layout'
+import Register from './pages/Register'
+import { ReactElement } from 'react'
 
-const App = () => {
+const App = (): ReactElement => {
     return (
         <Router>
             <Routes>
@@ -23,6 +25,14 @@ const App = () => {
                     element={
                         <Layout>
                             <p>Search page</p>
+                        </Layout>
+                    }
+                />
+                <Route
+                    path="/register"
+                    element={
+                        <Layout>
+                            <Register />
                         </Layout>
                     }
                 />
