@@ -1,6 +1,30 @@
 import config from '../config'
 
-// export const getRequest = (): void => {}
+export const validationRequest = async (): Promise<any> => {
+    const response = await fetch(
+        `${config.api.url.toString()}/validate-token`,
+        {
+            method: 'GET',
+            credentials: 'include',
+        }
+    )
+    const responseBody = await response.json()
+    if (!response.ok) {
+        throw new Error(responseBody.message)
+    }
+    return responseBody
+}
+export const getRequest = async (data: Request<any>): Promise<Response> => {
+    const response = await fetch(data.url, {
+        method: 'GET',
+        credentials: 'include',
+    })
+    const responseBody = await response.json()
+    if (!response.ok) {
+        throw new Error(responseBody.message)
+    }
+    return responseBody
+}
 
 export const postRequest = async (data: Request<any>): Promise<Response> => {
     const response = await fetch(data.url, {

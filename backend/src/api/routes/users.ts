@@ -13,6 +13,7 @@ import {
 } from '../validators/user'
 import { validationResult } from 'express-validator'
 import config from '../../config'
+import validateToken from '../middlewares/authentication'
 
 export default (router: Router) => {
     const userService = Container.get(UserService)
@@ -78,6 +79,16 @@ export default (router: Router) => {
                 response.setError(e.message)
             }
             res.json(response)
+        }
+    )
+
+    router.get(
+        '/validate-token',
+        validateToken,
+        (req: Request, res: Response) => {
+            const response = new ResponseWrappper()
+            response.setData({ userId: req.userId })
+            res.status(200).json(response)
         }
     )
 }
