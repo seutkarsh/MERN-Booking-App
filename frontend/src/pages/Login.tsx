@@ -3,10 +3,12 @@ import { postRequest, Request } from '../api/request'
 import { useAppContext } from '../contexts/AppContext'
 import { useNavigate } from 'react-router-dom'
 import React from 'react'
+import { useQueryClient } from 'react-query'
 
 const Login = (): React.ReactElement => {
     const { showToast } = useAppContext()
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
     const {
         register,
         handleSubmit,
@@ -23,6 +25,7 @@ const Login = (): React.ReactElement => {
                 message: 'Login Successful',
                 type: 'SUCCESS',
             })
+            await queryClient.invalidateQueries('validateToken')
             navigate('/')
         } else {
             showToast({

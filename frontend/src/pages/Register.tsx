@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form'
 import { postRequest, Request } from '../api/request'
 import { useAppContext } from '../contexts/AppContext'
 import { useNavigate } from 'react-router-dom'
+import { useQueryClient } from 'react-query'
 
 const Register = (): ReactElement => {
     const { showToast } = useAppContext()
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
 
     const {
         register,
@@ -22,6 +24,7 @@ const Register = (): ReactElement => {
 
         if (response.success) {
             showToast({ message: 'Registration Successful', type: 'SUCCESS' })
+            await queryClient.invalidateQueries('validateToken')
             navigate('/')
         } else {
             showToast({

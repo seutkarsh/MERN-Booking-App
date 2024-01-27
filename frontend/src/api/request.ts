@@ -1,4 +1,5 @@
 import config from '../config'
+import { json } from 'stream/consumers'
 
 export const validationRequest = async (): Promise<any> => {
     const response = await fetch(
@@ -33,7 +34,7 @@ export const postRequest = async (data: Request<any>): Promise<Response> => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data.body),
+        body: data.body ? JSON.stringify(data.body) : undefined,
     })
 
     const responseBody = await response.json()

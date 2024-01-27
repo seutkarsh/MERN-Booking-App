@@ -82,6 +82,14 @@ export default (router: Router) => {
         }
     )
 
+    router.post('/logout', (req: Request, res: Response) => {
+        const response = new ResponseWrappper()
+        res.cookie('auth_token', '', {
+            expires: new Date(0),
+        })
+        res.json(response)
+    })
+
     router.get(
         '/validate-token',
         validateToken,
