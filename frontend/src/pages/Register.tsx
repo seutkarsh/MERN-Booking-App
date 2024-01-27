@@ -1,11 +1,12 @@
 import { ReactElement } from 'react'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
 import { postRequest, Request } from '../api/request'
 import { useAppContext } from '../contexts/AppContext'
+import { useNavigate } from 'react-router-dom'
 
 const Register = (): ReactElement => {
     const { showToast } = useAppContext()
+    const navigate = useNavigate()
 
     const {
         register,
@@ -14,18 +15,22 @@ const Register = (): ReactElement => {
         formState: { errors },
     } = useForm<IRegisterFormData>()
 
-    const mutation = useMutation(postRequest, {
-        onSuccess: () => {
-            showToast({ message: 'Registration Successful', type: 'SUCCESS' })
-        },
-        onError: (error: Error) => {
-            showToast({ message: error.message, type: 'ERROR' })
-        },
-    })
-    const onSubmit = handleSubmit((data) => {
+    const onSubmit = handleSubmit(async (data) => {
         const request = new Request<IRegisterFormData>('/register')
         request.setBody(data)
-        mutation.mutate(request)
+        const response = await postRequest(request)
+
+        if (response.success) {
+            showToast({ message: 'Registration Successful', type: 'SUCCESS' })
+            navigate('/')
+        } else {
+            showToast({
+                message: response.errors
+                    ? response.errors.toString()
+                    : 'Something Went Wrong',
+                type: 'ERROR',
+            })
+        }
     })
     return (
         <form className="flex flex-col gap-5" onSubmit={onSubmit}>

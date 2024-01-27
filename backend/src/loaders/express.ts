@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from 'express'
 import cors from 'cors'
 import routes from '../api/index'
+import config from '../config'
 
 export default ({ app }: { app: Application }): void => {
     /*
@@ -15,6 +16,11 @@ export default ({ app }: { app: Application }): void => {
     })
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
-    app.use(cors())
+    app.use(
+        cors({
+            origin: config.frontend.url,
+            credentials: true,
+        })
+    )
     app.use('/api', routes())
 }

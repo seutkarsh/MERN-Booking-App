@@ -8,6 +8,12 @@ if (!envFound) {
     throw new Error("⚠️  Couldn't find .env file  ⚠️")
 }
 export default {
+    environment: {
+        production: process.env.NODE_ENV === 'production' || false,
+    },
+    frontend: {
+        url: process.env.FRONTEND_URL || 'http://localhost:3000',
+    },
     port: parseInt(process.env.PORT || '7000', 10) || 7000,
     salt:
         process.env.SALT ||
