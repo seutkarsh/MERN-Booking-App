@@ -7,6 +7,7 @@ import {
 import Layout from './components/Layout'
 import Register from './pages/Register'
 import { ReactElement } from 'react'
+import Login from './pages/Login'
 
 const App = (): ReactElement => {
     return (
@@ -33,6 +34,14 @@ const App = (): ReactElement => {
                     element={
                         <Layout>
                             <Register />
+                        </Layout>
+                    }
+                />
+                <Route
+                    path="/login"
+                    element={
+                        <Layout>
+                            <Login />
                         </Layout>
                     }
                 />
