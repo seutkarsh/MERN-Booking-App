@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { postRequest, Request } from '../api/request'
 import { useAppContext } from '../contexts/AppContext'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import React from 'react'
 import { useQueryClient } from 'react-query'
 
@@ -71,14 +71,23 @@ const Login = (): React.ReactElement => {
                     <span className="text-red-500">{errors.email.message}</span>
                 )}
             </label>
-            <span>
-                <button
-                    type="submit"
-                    className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500"
-                >
-                    Login
-                </button>
-            </span>
+            <div className="flex flex-row justify-between items-center">
+                <span className="text-sm ">
+                    Not Registered?
+                    <Link to="/register" className="underline">
+                        {' '}
+                        Create an account here
+                    </Link>
+                </span>
+                <span>
+                    <button
+                        type="submit"
+                        className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 rounded-xl"
+                    >
+                        Login
+                    </button>
+                </span>
+            </div>
         </form>
     )
 }

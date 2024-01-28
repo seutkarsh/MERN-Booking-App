@@ -1,8 +1,8 @@
-import { ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 import { useForm } from 'react-hook-form'
 import { postRequest, Request } from '../api/request'
 import { useAppContext } from '../contexts/AppContext'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useQueryClient } from 'react-query'
 
 const Register = (): ReactElement => {
@@ -122,14 +122,22 @@ const Register = (): ReactElement => {
                 )}
             </label>
 
-            <span>
-                <button
-                    type="submit"
-                    className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500"
-                >
-                    Create Account
-                </button>
-            </span>
+            <div className="flex flex-row justify-between items-center">
+                <span className="text-sm ">
+                    Already Registered?{' '}
+                    <Link to="/login" className="underline">
+                        Sign in here
+                    </Link>
+                </span>
+                <span>
+                    <button
+                        type="submit"
+                        className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 rounded-xl"
+                    >
+                        Create Account
+                    </button>
+                </span>
+            </div>
         </form>
     )
 }
