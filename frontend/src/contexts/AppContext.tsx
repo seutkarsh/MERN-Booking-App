@@ -21,9 +21,6 @@ export const AppContextProvider = ({
     children: React.ReactElement
 }): React.ReactElement => {
     const [toast, setToast] = useState<IToastMessage | undefined>(undefined)
-
-    const requestData = new Request('/validate-token')
-
     const { isError } = useQuery('validateToken', validationRequest, {
         retry: false,
     })

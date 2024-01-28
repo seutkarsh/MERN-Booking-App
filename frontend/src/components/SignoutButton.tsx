@@ -1,6 +1,6 @@
 import React from 'react'
-import { getRequest, postRequest, Request } from '../api/request'
-import { useQuery, useQueryClient } from 'react-query'
+import { postRequest, Request } from '../api/request'
+import { useQueryClient } from 'react-query'
 
 const SignoutButton = (): React.ReactElement => {
     const queryClient = useQueryClient()

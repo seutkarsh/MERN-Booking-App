@@ -1,5 +1,4 @@
 import config from '../config'
-import { json } from 'stream/consumers'
 
 export const validationRequest = async (): Promise<any> => {
     const response = await fetch(
