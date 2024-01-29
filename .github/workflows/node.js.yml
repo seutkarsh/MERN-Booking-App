@@ -20,6 +20,7 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
+    - name: Checkout Repository
     - uses: actions/checkout@v3
     - run: cd backend
     - name: Use Node.js ${{ matrix.node-version }}
@@ -27,6 +28,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: ./backend/package-lock.json
+      
     - run: npm ci
     - run: cd ../frontend && npm install && npm run build && cd ../backend
     - run: 
