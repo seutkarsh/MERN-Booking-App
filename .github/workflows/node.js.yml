@@ -29,7 +29,7 @@ jobs:
         cache-dependency-path: ./backend/package-lock.json
       
     
-    - run: cd ../frontend && npm install && npm run build && cd ../backend
+    - run: cd frontend && npm install && npm run build && cd ../backend
     - run: 
         touch .env
         echo "${{secrets.PROD_ENV_FILE}}" > .env
