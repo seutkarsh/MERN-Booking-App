@@ -1,11 +1,14 @@
-import { ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
 import { postRequest, Request } from '../api/request'
 import { useAppContext } from '../contexts/AppContext'
+import { Link, useNavigate } from 'react-router-dom'
+import { useQueryClient } from 'react-query'
 
 const Register = (): ReactElement => {
     const { showToast } = useAppContext()
+    const navigate = useNavigate()
+    const queryClient = useQueryClient()
 
     const {
         register,
@@ -14,18 +17,23 @@ const Register = (): ReactElement => {
         formState: { errors },
     } = useForm<IRegisterFormData>()
 
-    const mutation = useMutation(postRequest, {
-        onSuccess: () => {
-            showToast({ message: 'Registration Successful', type: 'SUCCESS' })
-        },
-        onError: (error: Error) => {
-            showToast({ message: error.message, type: 'ERROR' })
-        },
-    })
-    const onSubmit = handleSubmit((data) => {
+    const onSubmit = handleSubmit(async (data) => {
         const request = new Request<IRegisterFormData>('/register')
         request.setBody(data)
-        mutation.mutate(request)
+        const response = await postRequest(request)
+
+        if (response.success) {
+            showToast({ message: 'Registration Successful', type: 'SUCCESS' })
+            await queryClient.invalidateQueries('validateToken')
+            navigate('/')
+        } else {
+            showToast({
+                message: response.errors
+                    ? response.errors.toString()
+                    : 'Something Went Wrong',
+                type: 'ERROR',
+            })
+        }
     })
     return (
         <form className="flex flex-col gap-5" onSubmit={onSubmit}>
@@ -114,14 +122,22 @@ const Register = (): ReactElement => {
                 )}
             </label>
 
-            <span>
-                <button
-                    type="submit"
-                    className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500"
-                >
-                    Create Account
-                </button>
-            </span>
+            <div className="flex flex-row justify-between items-center">
+                <span className="text-sm ">
+                    Already Registered?{' '}
+                    <Link to="/login" className="underline">
+                        Sign in here
+                    </Link>
+                </span>
+                <span>
+                    <button
+                        type="submit"
+                        className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 rounded-xl"
+                    >
+                        Create Account
+                    </button>
+                </span>
+            </div>
         </form>
     )
 }

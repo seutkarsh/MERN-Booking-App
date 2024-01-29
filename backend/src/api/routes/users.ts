@@ -12,6 +12,8 @@ import {
     userLoginValidator,
 } from '../validators/user'
 import { validationResult } from 'express-validator'
+import config from '../../config'
+import validateToken from '../middlewares/authentication'
 
 export default (router: Router) => {
     const userService = Container.get(UserService)
@@ -35,6 +37,11 @@ export default (router: Router) => {
                 }
                 const data = await userService.registerUser(registrationDetails)
                 response.setData(data)
+                res.cookie('auth_token', data.authToken, {
+                    httpOnly: true,
+                    maxAge: 86400000,
+                    secure: config.environment.production,
+                })
             } catch (e) {
                 response.setError(e.message)
             }
@@ -63,10 +70,33 @@ export default (router: Router) => {
 
                 const data = await userService.userLogin(loginDetails)
                 response.setData(data)
+                res.cookie('auth_token', data.authToken, {
+                    httpOnly: true,
+                    maxAge: 86400000,
+                    secure: config.environment.production,
+                })
             } catch (e) {
                 response.setError(e.message)
             }
             res.json(response)
+        }
+    )
+
+    router.post('/logout', (req: Request, res: Response) => {
+        const response = new ResponseWrappper()
+        res.cookie('auth_token', '', {
+            expires: new Date(0),
+        })
+        res.json(response)
+    })
+
+    router.get(
+        '/validate-token',
+        validateToken,
+        (req: Request, res: Response) => {
+            const response = new ResponseWrappper()
+            response.setData({ userId: req.userId })
+            res.status(200).json(response)
         }
     )
 }
