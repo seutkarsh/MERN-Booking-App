@@ -28,10 +28,10 @@ jobs:
         cache: 'npm'
         cache-dependency-path: ./backend/package-lock.json
       
-    - run: npm ci
+    
     - run: cd ../frontend && npm install && npm run build && cd ../backend
     - run: 
         touch .env
         echo "${{secrets.PROD_ENV_FILE}}" > .env
-    - run: npm install && npm run build
+    - run: npm ci && npm run build
     - run: npm start
