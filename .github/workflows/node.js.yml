@@ -21,13 +21,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - run: cd backend
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: cd frontend && npm install && npm run build && cd ../backend
+    - run: cd ../frontend && npm install && npm run build && cd ../backend
     - run: 
         touch .env
         echo "${{secrets.PROD_ENV_FILE}}" > .env
