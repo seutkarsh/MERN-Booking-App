@@ -1,4 +1,4 @@
-import config from '../config'
+import config from '../config/index'
 
 export const validationRequest = async (): Promise<any> => {
     const response = await fetch(
@@ -34,6 +34,22 @@ export const postRequest = async (data: Request<any>): Promise<Response> => {
             'Content-Type': 'application/json',
         },
         body: data.body ? JSON.stringify(data.body) : undefined,
+    })
+
+    const responseBody = await response.json()
+    if (!response.ok) {
+        throw new Error(responseBody.message)
+    }
+    return responseBody
+}
+
+export const postFormRequest = async (
+    data: Request<any>
+): Promise<Response> => {
+    const response = await fetch(data.url, {
+        method: 'POST',
+        credentials: 'include',
+        body: data.body,
     })
 
     const responseBody = await response.json()

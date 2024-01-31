@@ -2,10 +2,11 @@ import { Container, Service } from 'typedi'
 import { ConfigOptions } from 'cloudinary'
 import mongoose, { Model } from 'mongoose'
 import { IHotel } from '../models/hotel'
+import { v2 as cloudinary } from 'cloudinary'
 
 @Service()
 export class MyHotelService {
-    private cloudinary: ConfigOptions = Container.get('CloudinaryClient')
+    // private cloudinary: ConfigOptions = Container.get('CloudinaryClient')
     private hotelSchema: Model<IHotel & mongoose.Document> =
         Container.get('HotelSchema')
     async addHotel(
@@ -17,7 +18,7 @@ export class MyHotelService {
             async (image) => {
                 const b64 = Buffer.from(image.buffer).toString('base64')
                 const dataURI = `data:${image.mimetype};base64,${b64}`
-                const res = await this.cloudinary.uploader.upload(dataURI)
+                const res = await cloudinary.uploader.upload(dataURI)
                 return res.url
             }
         )
