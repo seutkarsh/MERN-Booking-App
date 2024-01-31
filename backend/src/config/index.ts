@@ -24,6 +24,13 @@ export default {
             'kasbdjasbdbasdbasjdbjasbdbsajbdasbjdbajbd',
     },
     mongo: {
-        uri: process.env.MONGODB_CONNECTION_URI || 'mongodb://localhost:27017/',
+        uri:
+            (process.env.MONGODB_CONNECTION_URI as string) ||
+            'mongodb://localhost:27017/',
+    },
+    cloudinary: {
+        cloudName: (process.env.CLOUDINARY_CLOUD_NAME as string) || '',
+        apiKey: (process.env.CLOUDINARY_API_KEY as string) || '',
+        apiSecret: (process.env.CLOUDINARY_API_SECRET as string) || '',
     },
 }

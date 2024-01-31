@@ -8,8 +8,11 @@ import Layout from './components/Layout'
 import Register from './pages/Register'
 import { ReactElement } from 'react'
 import Login from './pages/Login'
+import AddHotel from './pages/AddHotel'
+import { useAppContext } from './contexts/AppContext'
 
 const App = (): ReactElement => {
+    const { isLoggedIn } = useAppContext()
     return (
         <Router>
             <Routes>
@@ -45,6 +48,20 @@ const App = (): ReactElement => {
                         </Layout>
                     }
                 />
+
+                {isLoggedIn && (
+                    <>
+                        <Route
+                            path="/add-hotel"
+                            element={
+                                <Layout>
+                                    <AddHotel />
+                                </Layout>
+                            }
+                        />
+                    </>
+                )}
+
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
         </Router>
