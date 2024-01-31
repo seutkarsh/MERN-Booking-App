@@ -1,7 +1,7 @@
 import React from 'react'
 import ManageHotelForm from '../forms/ManageHotelForm/ManageHotelForm'
-import { useMutation, useQueryClient } from 'react-query'
-import { postFormRequest, postRequest, Request } from '../api/request'
+import { useQueryClient } from 'react-query'
+import { postFormRequest, Request } from '../api/request'
 import { useAppContext } from '../contexts/AppContext'
 import { useNavigate } from 'react-router-dom'
 

@@ -1,5 +1,4 @@
 import { Container, Service } from 'typedi'
-import { ConfigOptions } from 'cloudinary'
 import mongoose, { Model } from 'mongoose'
 import { IHotel } from '../models/hotel'
 import { v2 as cloudinary } from 'cloudinary'
