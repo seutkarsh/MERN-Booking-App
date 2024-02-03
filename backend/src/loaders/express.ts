@@ -3,6 +3,7 @@ import cors from 'cors'
 import routes from '../api/index'
 import config from '../config'
 import cookieParser from 'cookie-parser'
+import path from 'path'
 
 export default ({ app }: { app: Application }): void => {
     /*
@@ -24,5 +25,18 @@ export default ({ app }: { app: Application }): void => {
             credentials: true,
         })
     )
+    /*
+    Load Frontend as Static Pages
+    */
+    app.use(express.static(path.join(__dirname, '../../../frontend/build')))
+    /*
+    API Routes
+    */
     app.use('/api', routes())
+    /*
+    Load Pages with Conditional Rendering
+    */
+    app.get('*', (req: Request, res: Response) => {
+        res.sendFile(path.join(__dirname, '../../../frontend/build/index.html'))
+    })
 }
