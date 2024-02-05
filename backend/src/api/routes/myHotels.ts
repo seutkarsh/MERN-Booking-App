@@ -3,6 +3,7 @@ import { upload } from '../middlewares/storage'
 import { ResponseWrappper } from '../responses/ResponseWrapper'
 import {
     IAddHotelFormDetails,
+    IHotelData,
     MyHotelService,
 } from '../../services/MyHotelService'
 import { Container } from 'typedi'
@@ -27,6 +28,23 @@ export default (router: Router) => {
                 const data: IHotel = await myHotelService.addHotel(
                     imageFiles,
                     hotelDetails,
+                    req.userId
+                )
+                response.setData(data)
+            } catch (e) {
+                response.setError(e.message)
+            }
+            res.json(response)
+        }
+    )
+
+    router.get(
+        '/my-hotels',
+        validateToken,
+        async (req: Request, res: Response) => {
+            const response = new ResponseWrappper<IHotel[]>()
+            try {
+                const data: IHotel[] = await myHotelService.getAllHotels(
                     req.userId
                 )
                 response.setData(data)

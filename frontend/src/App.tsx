@@ -10,6 +10,7 @@ import { ReactElement } from 'react'
 import Login from './pages/Login'
 import AddHotel from './pages/AddHotel'
 import { useAppContext } from './contexts/AppContext'
+import MyHotels from './pages/MyHotels'
 
 const App = (): ReactElement => {
     const { isLoggedIn } = useAppContext()
@@ -56,6 +57,14 @@ const App = (): ReactElement => {
                             element={
                                 <Layout>
                                     <AddHotel />
+                                </Layout>
+                            }
+                        />
+                        <Route
+                            path="/my-hotels"
+                            element={
+                                <Layout>
+                                    <MyHotels />
                                 </Layout>
                             }
                         />

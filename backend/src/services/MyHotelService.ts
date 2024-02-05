@@ -34,6 +34,10 @@ export class MyHotelService {
         const createdHotel: IHotel = await this.hotelSchema.create(hotelData)
         return createdHotel
     }
+
+    async getAllHotels(userId: string): Promise<IHotel[]> {
+        return this.hotelSchema.find({ userId: userId })
+    }
 }
 
 export interface IAddHotelFormDetails {
