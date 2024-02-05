@@ -45,3 +45,17 @@ await page.locator("[name='name']").fill("Test Hotel")
     await page.getByRole("button",{name:"Save"}).click();
     await expect(page.getByText("Hotel Added Successfully")).toBeVisible({timeout:30000})
 })
+
+test("should display hotels" , async ({page})=>{
+    await page.goto(`${UI_URL}my-hotels`);
+
+    await expect(page.getByText("Test Hotel")).toBeVisible();
+    await expect(page.getByText("Test Description")).toBeVisible();
+    await expect(page.getByText("Test City, Test Country")).toBeVisible()
+    await expect(page.getByText("Budget")).toBeVisible()
+    await expect(page.getByText("1000 per night")).toBeVisible()
+    await expect(page.getByText("2 adults, 1 children")).toBeVisible()
+    await expect(page.getByText("3 star rating")).toBeVisible()
+
+    await expect(page.getByRole("link",{name:"View Details"})).toBeVisible()
+})
