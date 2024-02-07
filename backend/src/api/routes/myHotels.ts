@@ -54,4 +54,23 @@ export default (router: Router) => {
             res.json(response)
         }
     )
+
+    router.get(
+        '/my-hotels/:id',
+        validateToken,
+        async (req: Request, res: Response) => {
+            const response = new ResponseWrappper<IHotel>()
+            try {
+                const id = req.params.id.toString()
+                const data: IHotel = await myHotelService.getHotelById(
+                    id,
+                    req.userId
+                )
+                response.setData(data)
+            } catch (e) {
+                response.setError(e.message)
+            }
+            res.json(response)
+        }
+    )
 }

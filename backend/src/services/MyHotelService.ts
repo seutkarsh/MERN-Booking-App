@@ -38,6 +38,17 @@ export class MyHotelService {
     async getAllHotels(userId: string): Promise<IHotel[]> {
         return this.hotelSchema.find({ userId: userId })
     }
+
+    async getHotelById(id: string, userId: string): Promise<IHotel> {
+        const hotel: IHotel | null = await this.hotelSchema.findOne({
+            _id: id,
+            userId: userId,
+        })
+        if (!hotel) {
+            throw new Error(Errors.HOTEL_NOT_FOUND_FOR_USER)
+        }
+        return hotel
+    }
 }
 
 export interface IAddHotelFormDetails {
@@ -56,4 +67,8 @@ export interface IHotelData extends IAddHotelFormDetails {
     imageUrls: string[]
     lastUpdated: Date
     userId: string
+}
+
+enum Errors {
+    HOTEL_NOT_FOUND_FOR_USER = 'No hotel found with this ID on logged in user',
 }
