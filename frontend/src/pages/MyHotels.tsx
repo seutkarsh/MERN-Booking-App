@@ -14,7 +14,7 @@ const MyHotels = (): React.ReactElement => {
 
     useEffect(() => {
         const getHotels = async (): Promise<void> => {
-            const request = new Request<FormData>('/my-hotels')
+            const request = new Request('/my-hotels')
             const response = await getRequest(request)
             if (response.errors) {
                 showToast({
@@ -98,7 +98,7 @@ const MyHotels = (): React.ReactElement => {
     )
 }
 
-interface IHotelData {
+export interface IHotelData {
     _id: string
     userId: string
     name: string

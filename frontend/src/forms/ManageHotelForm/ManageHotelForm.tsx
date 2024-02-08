@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import DetailsSection from './DetailsSection'
 import TypeSection from './TypeSection'
 import FacilitiesSection from './FacilitiesSection'
 import GuestsSection from './GuestsSection'
 import ImagesSection from './ImagesSection'
+import { IHotelData } from '../../pages/MyHotels'
 
 export interface HotelFormData {
     name: string
@@ -18,16 +19,22 @@ export interface HotelFormData {
     pricePerNight: number
     starRating: number
     imageFiles: FileList
+    imageUrls: string[]
 }
 
 export interface Props {
     onSave: (data: FormData) => Promise<void>
+    hotel?: IHotelData | undefined
 }
-const ManageHotelForm = ({ onSave }: Props): React.ReactElement => {
+const ManageHotelForm = ({ onSave, hotel }: Props): React.ReactElement => {
     const formMethods = useForm<HotelFormData>()
-    const { handleSubmit } = formMethods
+    const { handleSubmit, reset } = formMethods
 
     const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        reset(hotel)
+    }, [hotel, reset])
 
     const onSubmit = handleSubmit(async (formDataJson: HotelFormData) => {
         setIsLoading(true)
@@ -53,6 +60,7 @@ const ManageHotelForm = ({ onSave }: Props): React.ReactElement => {
         await onSave(formData)
         setIsLoading(false)
     })
+
     return (
         <FormProvider {...formMethods}>
             <form className="flex flex-col gap-10" onSubmit={onSubmit}>
