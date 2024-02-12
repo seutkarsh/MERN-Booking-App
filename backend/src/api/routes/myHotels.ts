@@ -4,6 +4,7 @@ import { ResponseWrappper } from '../responses/ResponseWrapper'
 import {
     IAddHotelFormDetails,
     IHotelData,
+    IUpdateHotelFormDetails,
     MyHotelService,
 } from '../../services/MyHotelService'
 import { Container } from 'typedi'
@@ -64,6 +65,31 @@ export default (router: Router) => {
                 const id = req.params.id.toString()
                 const data: IHotel = await myHotelService.getHotelById(
                     id,
+                    req.userId
+                )
+                response.setData(data)
+            } catch (e) {
+                response.setError(e.message)
+            }
+            res.json(response)
+        }
+    )
+
+    router.put(
+        '/my-hotels/:id',
+        validateToken,
+        upload.array('imageFiles'),
+        async (req: Request, res: Response) => {
+            const response = new ResponseWrappper<IHotel>()
+            try {
+                const imageFiles = req.files as Express.Multer.File[]
+                const hotelDetails: IUpdateHotelFormDetails = req.body
+                const id = req.params.id.toString()
+
+                const data: IHotel = await myHotelService.updateHotel(
+                    id,
+                    imageFiles,
+                    hotelDetails,
                     req.userId
                 )
                 response.setData(data)

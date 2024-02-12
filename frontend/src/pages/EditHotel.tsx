@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { getRequest, postFormRequest, Request } from '../api/request'
+import { getRequest, putFormRequest, Request } from '../api/request'
 import { useQueryClient } from 'react-query'
 import { useAppContext } from '../contexts/AppContext'
 import { IHotelData } from './MyHotels'
@@ -37,9 +37,11 @@ const EditHotel = (): React.ReactElement => {
     }, [hotelId])
 
     const handleSave = async (data: FormData): Promise<void> => {
-        const request = new Request<FormData>('/my-hotels')
+        const request = new Request<FormData>(
+            `/my-hotels/${data.get('hotelId')}`
+        )
         request.setBody(data)
-        const response = await postFormRequest(request)
+        const response = await putFormRequest(request)
         console.log(request)
         if (response.success) {
             showToast({

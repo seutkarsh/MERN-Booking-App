@@ -8,11 +8,10 @@ export class MyHotelService {
     // private cloudinary: ConfigOptions = Container.get('CloudinaryClient')
     private hotelSchema: Model<IHotel & mongoose.Document> =
         Container.get('HotelSchema')
-    async addHotel(
-        imageFiles: Express.Multer.File[],
-        hotelDetails: IAddHotelFormDetails,
-        userId: string
-    ): Promise<IHotel> {
+
+    private async uploadImages(
+        imageFiles: Express.Multer.File[]
+    ): Promise<string[]> {
         const uploadPromises: Promise<string>[] = imageFiles.map(
             async (image) => {
                 const b64 = Buffer.from(image.buffer).toString('base64')
@@ -22,8 +21,15 @@ export class MyHotelService {
             }
         )
 
-        const imageUrls: string[] = await Promise.all(uploadPromises)
+        return await Promise.all(uploadPromises)
+    }
 
+    async addHotel(
+        imageFiles: Express.Multer.File[],
+        hotelDetails: IAddHotelFormDetails,
+        userId: string
+    ): Promise<IHotel> {
+        const imageUrls = await this.uploadImages(imageFiles)
         const hotelData: IHotelData = {
             ...hotelDetails,
             imageUrls: imageUrls,
@@ -31,8 +37,7 @@ export class MyHotelService {
             userId: userId,
         }
 
-        const createdHotel: IHotel = await this.hotelSchema.create(hotelData)
-        return createdHotel
+        return await this.hotelSchema.create(hotelData)
     }
 
     async getAllHotels(userId: string): Promise<IHotel[]> {
@@ -49,6 +54,30 @@ export class MyHotelService {
         }
         return hotel
     }
+
+    async updateHotel(
+        id: string,
+        imageFiles: Express.Multer.File[],
+        hotelDetails: IUpdateHotelFormDetails,
+        userId: string
+    ): Promise<IHotel> {
+        await this.getHotelById(id, userId)
+        const updatedImageUrls = await this.uploadImages(imageFiles)
+        const updatedHotelData: IHotelData = {
+            ...hotelDetails,
+            imageUrls: [...updatedImageUrls, ...(hotelDetails.imageUrls || [])],
+            lastUpdated: new Date(),
+            userId: userId,
+        }
+
+        const hotel = await this.hotelSchema.findOneAndUpdate(
+            { _id: id, userId: userId },
+            updatedHotelData,
+            { new: true }
+        )
+        if (!hotel) throw new Error(Errors.UPDATE_FAILED_FOR_SOME_REASON)
+        return hotel
+    }
 }
 
 export interface IAddHotelFormDetails {
@@ -63,6 +92,9 @@ export interface IAddHotelFormDetails {
     pricePerNight: number
     starRating: number
 }
+export interface IUpdateHotelFormDetails extends IAddHotelFormDetails {
+    imageUrls: string[]
+}
 export interface IHotelData extends IAddHotelFormDetails {
     imageUrls: string[]
     lastUpdated: Date
@@ -71,4 +103,5 @@ export interface IHotelData extends IAddHotelFormDetails {
 
 enum Errors {
     HOTEL_NOT_FOUND_FOR_USER = 'No hotel found with this ID on logged in user',
+    UPDATE_FAILED_FOR_SOME_REASON = 'Update failed for some reason',
 }

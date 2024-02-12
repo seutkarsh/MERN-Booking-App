@@ -39,6 +39,7 @@ const ManageHotelForm = ({ onSave, hotel }: Props): React.ReactElement => {
     const onSubmit = handleSubmit(async (formDataJson: HotelFormData) => {
         setIsLoading(true)
         const formData = new FormData()
+        if (hotel) formData.append('hotelId', hotel._id)
         formData.append('name', formDataJson.name)
         formData.append('city', formDataJson.city)
         formData.append('country', formDataJson.country)
@@ -53,6 +54,11 @@ const ManageHotelForm = ({ onSave, hotel }: Props): React.ReactElement => {
             formData.append(`facilities[${index}]`, facility)
         })
 
+        if (formDataJson.imageUrls) {
+            formDataJson.imageUrls.forEach((url, index) => {
+                formData.append(`imageUrls[${index}]`, url)
+            })
+        }
         Array.from(formDataJson.imageFiles).forEach((imageFile) => {
             formData.append('imageFiles', imageFile)
         })
@@ -75,7 +81,7 @@ const ManageHotelForm = ({ onSave, hotel }: Props): React.ReactElement => {
                         disabled={isLoading}
                         className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 rounded-xl"
                     >
-                        Save
+                        {isLoading ? <span>Saving...</span> : <span>Save</span>}
                     </button>
                 </span>
             </form>
