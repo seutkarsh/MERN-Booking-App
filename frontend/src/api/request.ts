@@ -93,4 +93,8 @@ export class Request<T> {
     setBody(data: T): void {
         this.body = data
     }
+
+    setQueryParams(queryParams: URLSearchParams): void {
+        this.url = `${this.url}?${queryParams}`
+    }
 }

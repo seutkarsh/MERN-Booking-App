@@ -12,6 +12,7 @@ import AddHotel from './pages/AddHotel'
 import { useAppContext } from './contexts/AppContext'
 import MyHotels from './pages/MyHotels'
 import EditHotel from './pages/EditHotel'
+import Search from './pages/Search'
 
 const App = (): ReactElement => {
     const { isLoggedIn } = useAppContext()
@@ -30,7 +31,7 @@ const App = (): ReactElement => {
                     path="/search"
                     element={
                         <Layout>
-                            <p>Search page</p>
+                            <Search />
                         </Layout>
                     }
                 />
