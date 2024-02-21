@@ -31,3 +31,14 @@ test("should show hotel search results", async ({page})=>{
     await expect(page.getByText("Hotels found in Jaipur")).toBeVisible();
     await expect(page.getByText("Test Hotel Updated")).toBeVisible();
 })
+
+test("should show hotel detail", async ({ page }) => {
+    await page.goto(UI_URL);
+
+    await page.getByPlaceholder("Where are you going?").fill("Jaipur");
+    await page.getByRole("button", { name: "Search" }).click();
+
+    await page.getByText("Hotel - 123").click();
+    await expect(page).toHaveURL(/detail/);
+    await expect(page.getByRole("button", { name: "Book now" })).toBeVisible();
+});
