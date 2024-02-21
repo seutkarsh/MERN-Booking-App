@@ -45,6 +45,11 @@ export class HotelService {
         }
     }
 
+    async getHotelById(id: string): Promise<IHotel> {
+        const hotel: IHotel | null = await this.hotelSchema.findById(id)
+        if (!hotel) throw new Error(Errors.HOTEL_NOT_FOUND)
+        return hotel
+    }
     private createSearchQuery(
         queryParams: ISearchQueryParams
     ): Record<string, unknown> {
@@ -109,4 +114,8 @@ export interface ISearchQueryParams {
     stars?: string[]
     maxPrice?: string
     sortOption?: string
+}
+
+enum Errors {
+    HOTEL_NOT_FOUND = 'Hotel Not Found',
 }

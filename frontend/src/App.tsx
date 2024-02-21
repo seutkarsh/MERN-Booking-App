@@ -13,6 +13,7 @@ import { useAppContext } from './contexts/AppContext'
 import MyHotels from './pages/MyHotels'
 import EditHotel from './pages/EditHotel'
 import Search from './pages/Search'
+import Detail from './pages/Detail'
 
 const App = (): ReactElement => {
     const { isLoggedIn } = useAppContext()
@@ -48,6 +49,15 @@ const App = (): ReactElement => {
                     element={
                         <Layout>
                             <Login />
+                        </Layout>
+                    }
+                />
+
+                <Route
+                    path="/detail/:id"
+                    element={
+                        <Layout>
+                            <Detail />
                         </Layout>
                     }
                 />

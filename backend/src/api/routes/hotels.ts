@@ -3,6 +3,7 @@ import { Container } from 'typedi'
 import { HotelService, ISearchQueryParams } from '../../services/HotelService'
 import { ResponseWrappper } from '../responses/ResponseWrapper'
 import { ISearchResponse } from '../responses/hotel'
+import { IHotel } from '../../models/hotel'
 
 export default (router: Router) => {
     const hotelService = Container.get(HotelService)
@@ -23,10 +24,20 @@ export default (router: Router) => {
                 maxPrice: req.query.maxPrice as string,
                 sortOption: req.query.sortOption?.toString(),
             }
-
-            console.log(queryParams)
             const data: ISearchResponse =
                 await hotelService.getSearchHotels(queryParams)
+            response.setData(data)
+        } catch (e) {
+            response.setError(e.message)
+        }
+        res.json(response)
+    })
+
+    router.get('/hotels/:id', async (req: Request, res: Response) => {
+        const response = new ResponseWrappper<IHotel>()
+        try {
+            const id = req.params.id.toString()
+            const data: IHotel = await hotelService.getHotelById(id)
             response.setData(data)
         } catch (e) {
             response.setError(e.message)
