@@ -1,9 +1,15 @@
 import { Router, Request, Response } from 'express'
 import { Container } from 'typedi'
-import { HotelService, ISearchQueryParams } from '../../services/HotelService'
+import {
+    HotelService,
+    IBookingBody,
+    ISearchQueryParams,
+} from '../../services/HotelService'
 import { ResponseWrappper } from '../responses/ResponseWrapper'
-import { ISearchResponse } from '../responses/hotel'
-import { IHotel } from '../../models/hotel'
+import { IPaymentIntentResponse, ISearchResponse } from '../responses/hotel'
+import { IBooking, IHotel } from '../../models/hotel'
+import validateToken from '../middlewares/authentication'
+import user from '../../models/user'
 
 export default (router: Router) => {
     const hotelService = Container.get(HotelService)
@@ -44,4 +50,50 @@ export default (router: Router) => {
         }
         res.json(response)
     })
+
+    router.post(
+        '/hotels/:id/booking/payment-intent',
+        validateToken,
+        async (req: Request, res: Response) => {
+            const response = new ResponseWrappper<IPaymentIntentResponse>()
+            try {
+                const numberOfNights = parseInt(req.body.numberOfNights)
+                const hotelId: string = req.params.id
+                const userId: string = req.userId
+
+                const data: IPaymentIntentResponse =
+                    await hotelService.generatePaymentIntent(
+                        numberOfNights,
+                        hotelId,
+                        userId
+                    )
+                response.setData(data)
+            } catch (e) {
+                response.setError(e.message)
+            }
+            res.json(response)
+        }
+    )
+
+    router.post(
+        '/hotels/:id/bookings',
+        validateToken,
+        async (req: Request, res: Response) => {
+            const response = new ResponseWrappper<IBooking>()
+            try {
+                const requestData: IBookingBody = req.body
+                const hotelId: string = req.params.id
+                const userId: string = req.userId
+                const data: IBooking = await hotelService.confirmBooking(
+                    requestData,
+                    hotelId,
+                    userId
+                )
+                response.setData(data)
+            } catch (e) {
+                response.setError(e.message)
+            }
+            res.json(response)
+        }
+    )
 }

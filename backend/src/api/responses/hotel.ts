@@ -8,3 +8,9 @@ export interface ISearchResponse {
         pages: number
     }
 }
+
+export interface IPaymentIntentResponse {
+    paymentIntentId: string
+    clientSecret: string
+    totalCost: number
+}
