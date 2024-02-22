@@ -1,5 +1,4 @@
 import {expect, test} from "@playwright/test";
-import * as path from "path";
 
 const UI_URL = "http://localhost:3000/"
 test.beforeEach(async ({page})=>{

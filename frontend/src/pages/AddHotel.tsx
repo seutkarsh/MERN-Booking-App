@@ -3,7 +3,6 @@ import ManageHotelForm from '../forms/ManageHotelForm/ManageHotelForm'
 import { useQueryClient } from 'react-query'
 import { postFormRequest, Request } from '../api/request'
 import { useAppContext } from '../contexts/AppContext'
-import { useNavigate } from 'react-router-dom'
 
 const AddHotel = (): React.ReactElement => {
     const queryClient = useQueryClient()
