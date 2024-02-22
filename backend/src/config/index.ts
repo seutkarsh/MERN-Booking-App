@@ -33,4 +33,9 @@ export default {
         apiKey: (process.env.CLOUDINARY_API_KEY as string) || '',
         apiSecret: (process.env.CLOUDINARY_API_SECRET as string) || '',
     },
+    payment: {
+        stripe: {
+            apiKey: (process.env.STRIPE_API_KEY as string) || '',
+        },
+    },
 }
