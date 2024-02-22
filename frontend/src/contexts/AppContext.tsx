@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import Toast from '../components/Toast'
-import { validationRequest, Request } from '../api/request'
+import { validationRequest } from '../api/request'
 import { useQuery } from 'react-query'
 import { loadStripe, Stripe } from '@stripe/stripe-js'
 import config from '../config'

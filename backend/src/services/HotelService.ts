@@ -2,10 +2,8 @@ import { Container, Service } from 'typedi'
 import mongoose, { Model } from 'mongoose'
 import { IBooking, IHotel } from '../models/hotel'
 import { IPaymentIntentResponse, ISearchResponse } from '../api/responses/hotel'
-import * as stripe from 'stripe'
 import { Stripe } from 'stripe'
 import config from '../config'
-import { metadata } from 'reflect-metadata/no-conflict'
 
 @Service()
 export class HotelService {

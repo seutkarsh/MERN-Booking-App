@@ -4,8 +4,6 @@ import ReactDatePicker from 'react-datepicker'
 import { useSearchContext } from '../../contexts/SearchContext'
 import { useAppContext } from '../../contexts/AppContext'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Simulate } from 'react-dom/test-utils'
-import submit = Simulate.submit
 
 interface IProps {
     hotelId: string

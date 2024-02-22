@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom'
 const AddHotel = (): React.ReactElement => {
     const queryClient = useQueryClient()
     const { showToast } = useAppContext()
-    const navigate = useNavigate()
     const handleSave = async (data: FormData): Promise<void> => {
         const request = new Request<FormData>('/my-hotels')
         request.setBody(data)
@@ -20,7 +19,6 @@ const AddHotel = (): React.ReactElement => {
                 type: 'SUCCESS',
             })
             await queryClient.invalidateQueries('validateToken')
-            // navigate('/')
         } else {
             showToast({
                 message: response.errors

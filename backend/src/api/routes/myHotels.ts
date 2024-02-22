@@ -3,7 +3,6 @@ import { upload } from '../middlewares/storage'
 import { ResponseWrappper } from '../responses/ResponseWrapper'
 import {
     IAddHotelFormDetails,
-    IHotelData,
     IUpdateHotelFormDetails,
     MyHotelService,
 } from '../../services/MyHotelService'

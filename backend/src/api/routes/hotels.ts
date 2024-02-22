@@ -9,7 +9,6 @@ import { ResponseWrappper } from '../responses/ResponseWrapper'
 import { IPaymentIntentResponse, ISearchResponse } from '../responses/hotel'
 import { IBooking, IHotel } from '../../models/hotel'
 import validateToken from '../middlewares/authentication'
-import user from '../../models/user'
 
 export default (router: Router) => {
     const hotelService = Container.get(HotelService)

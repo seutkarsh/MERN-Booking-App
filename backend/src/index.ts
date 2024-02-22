@@ -2,7 +2,6 @@ import express from 'express'
 import 'reflect-metadata'
 import Loader from './loaders/index'
 import config from './config'
-import path from 'path'
 
 const startServer = async () => {
     const app = express()
@@ -19,5 +18,5 @@ startServer()
         console.log(`Server Start Complete`)
     })
     .catch((e) => {
-        console.log(`Server Start Failed becasuse of Error: ${e.message}`)
+        console.log(`Server Start Failed because of Error: ${e.message}`)
     })
