@@ -10,6 +10,11 @@ import { ReactElement } from 'react'
 import Login from './pages/Login'
 import AddHotel from './pages/AddHotel'
 import { useAppContext } from './contexts/AppContext'
+import MyHotels from './pages/MyHotels'
+import EditHotel from './pages/EditHotel'
+import Search from './pages/Search'
+import Detail from './pages/Detail'
+import Booking from './pages/Booking'
 
 const App = (): ReactElement => {
     const { isLoggedIn } = useAppContext()
@@ -28,7 +33,7 @@ const App = (): ReactElement => {
                     path="/search"
                     element={
                         <Layout>
-                            <p>Search page</p>
+                            <Search />
                         </Layout>
                     }
                 />
@@ -49,13 +54,46 @@ const App = (): ReactElement => {
                     }
                 />
 
+                <Route
+                    path="/detail/:id"
+                    element={
+                        <Layout>
+                            <Detail />
+                        </Layout>
+                    }
+                />
+
                 {isLoggedIn && (
                     <>
+                        <Route
+                            path="/hotel/:id/booking"
+                            element={
+                                <Layout>
+                                    <Booking />
+                                </Layout>
+                            }
+                        />
                         <Route
                             path="/add-hotel"
                             element={
                                 <Layout>
                                     <AddHotel />
+                                </Layout>
+                            }
+                        />
+                        <Route
+                            path="/my-hotels"
+                            element={
+                                <Layout>
+                                    <MyHotels />
+                                </Layout>
+                            }
+                        />
+                        <Route
+                            path="/edit-hotel/:hotelId"
+                            element={
+                                <Layout>
+                                    <EditHotel />
                                 </Layout>
                             }
                         />

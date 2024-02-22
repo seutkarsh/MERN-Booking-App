@@ -3,6 +3,7 @@ import { Container } from 'typedi'
 import {
     ILoginFromDetails,
     IRegistrationFromDetails,
+    IUserWithoutPassword,
     UserService,
 } from '../../services/UserService'
 import { ResponseWrappper } from '../responses/ResponseWrapper'
@@ -99,4 +100,17 @@ export default (router: Router) => {
             res.status(200).json(response)
         }
     )
+
+    router.get('/me', validateToken, async (req: Request, res: Response) => {
+        const response = new ResponseWrappper<IUserWithoutPassword>()
+        try {
+            const userId = req.userId
+            const data: IUserWithoutPassword =
+                await userService.getUserByIdWithoutPassword(userId)
+            response.setData(data)
+        } catch (e) {
+            response.setError(e.message)
+        }
+        res.json(response)
+    })
 }

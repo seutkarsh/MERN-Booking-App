@@ -58,6 +58,19 @@ export const postFormRequest = async (
     }
     return responseBody
 }
+export const putFormRequest = async (data: Request<any>): Promise<Response> => {
+    const response = await fetch(data.url, {
+        method: 'PUT',
+        credentials: 'include',
+        body: data.body,
+    })
+
+    const responseBody = await response.json()
+    if (!response.ok) {
+        throw new Error(responseBody.message)
+    }
+    return responseBody
+}
 
 export interface Response {
     success: boolean
@@ -79,5 +92,9 @@ export class Request<T> {
 
     setBody(data: T): void {
         this.body = data
+    }
+
+    setQueryParams(queryParams: URLSearchParams): void {
+        this.url = `${this.url}?${queryParams}`
     }
 }

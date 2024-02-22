@@ -41,6 +41,17 @@ export class UserService {
         return { authToken: token }
     }
 
+    async getUserByIdWithoutPassword(
+        userId: string
+    ): Promise<IUserWithoutPassword> {
+        const user: IUserWithoutPassword | null =
+            ((await this.userSchema
+                .findById(userId)
+                .select('-password')) as IUserWithoutPassword) || null
+        if (!user) throw new Error(Errors.USER_NOT_FOUND)
+        return user
+    }
+
     private async getUserByEmail(email: string): Promise<IUser | null> {
         return this.userSchema.findOne({ email: email })
     }
@@ -59,6 +70,7 @@ export class UserService {
 enum Errors {
     USER_ALREADY_EXISTS = 'User Already Exists',
     INVALID_CREDENTIALS = 'Invalid Credentials',
+    USER_NOT_FOUND = 'User Not Found',
 }
 export interface IRegistrationFromDetails {
     password: string
@@ -69,5 +81,12 @@ export interface IRegistrationFromDetails {
 
 export interface ILoginFromDetails {
     password: string
+    email: string
+}
+
+export interface IUserWithoutPassword {
+    _id: string
+    firstName: string
+    lastName: string
     email: string
 }

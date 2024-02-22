@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import DetailsSection from './DetailsSection'
 import TypeSection from './TypeSection'
 import FacilitiesSection from './FacilitiesSection'
 import GuestsSection from './GuestsSection'
 import ImagesSection from './ImagesSection'
+import { IHotelData } from '../../pages/MyHotels'
 
 export interface HotelFormData {
     name: string
@@ -18,20 +19,27 @@ export interface HotelFormData {
     pricePerNight: number
     starRating: number
     imageFiles: FileList
+    imageUrls: string[]
 }
 
 export interface Props {
     onSave: (data: FormData) => Promise<void>
+    hotel?: IHotelData | undefined
 }
-const ManageHotelForm = ({ onSave }: Props): React.ReactElement => {
+const ManageHotelForm = ({ onSave, hotel }: Props): React.ReactElement => {
     const formMethods = useForm<HotelFormData>()
-    const { handleSubmit } = formMethods
+    const { handleSubmit, reset } = formMethods
 
     const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        reset(hotel)
+    }, [hotel, reset])
 
     const onSubmit = handleSubmit(async (formDataJson: HotelFormData) => {
         setIsLoading(true)
         const formData = new FormData()
+        if (hotel) formData.append('hotelId', hotel._id)
         formData.append('name', formDataJson.name)
         formData.append('city', formDataJson.city)
         formData.append('country', formDataJson.country)
@@ -46,6 +54,11 @@ const ManageHotelForm = ({ onSave }: Props): React.ReactElement => {
             formData.append(`facilities[${index}]`, facility)
         })
 
+        if (formDataJson.imageUrls) {
+            formDataJson.imageUrls.forEach((url, index) => {
+                formData.append(`imageUrls[${index}]`, url)
+            })
+        }
         Array.from(formDataJson.imageFiles).forEach((imageFile) => {
             formData.append('imageFiles', imageFile)
         })
@@ -53,6 +66,7 @@ const ManageHotelForm = ({ onSave }: Props): React.ReactElement => {
         await onSave(formData)
         setIsLoading(false)
     })
+
     return (
         <FormProvider {...formMethods}>
             <form className="flex flex-col gap-10" onSubmit={onSubmit}>
@@ -67,7 +81,7 @@ const ManageHotelForm = ({ onSave }: Props): React.ReactElement => {
                         disabled={isLoading}
                         className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 rounded-xl"
                     >
-                        Save
+                        {isLoading ? <span>Saving...</span> : <span>Save</span>}
                     </button>
                 </span>
             </form>
